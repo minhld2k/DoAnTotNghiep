@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC  
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"  
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">  
+        
+<tiles-definitions>  
+ 
+    <!-- Base Define -->
+    <definition name="base.definition" 
+        template="/WEB-INF/views/layouts/layout.jsp">  
+        <put-attribute name="title" value="" />  
+        <put-attribute name="nav-left" value="/WEB-INF/views/layouts/_nav-left.jsp" />  
+        <put-attribute name="nav-top" value="/WEB-INF/views/layouts/_nav-top.jsp" />  
+        <put-attribute name="body" value="" />  
+        <put-attribute name="footer" value="/WEB-INF/views/layouts/_footer.jsp" />  
+    </definition>  
+ 
+    <!-- listChucNang Page -->
+    <definition name="chucnang.list" extends="base.definition">  
+        <put-attribute name="title" value="Danh sách chức năng" />  
+        <put-attribute name="body" value="/WEB-INF/views/qtht/chucnang/listChucNang.jsp" />  
+    </definition>  
+    
+    <!-- listItemChucNang Page -->
+    <definition name="chucnang.listitem" template="/WEB-INF/views/qtht/chucnang/listItem.jsp">     
+    </definition>  
+       
+    <!-- editChucNang Page -->
+    <definition name="chucnang.editChucNang" extends="base.definition">  
+        <put-attribute name="title" value="" />  
+        <put-attribute name="body" value="/WEB-INF/views/qtht/chucnang/editChucNang.jsp" />  
+    </definition>    
+    
+      <!-- listNhom Page -->
+    <definition name="nhomnguoidung.list" extends="base.definition">  
+        <put-attribute name="title" value="Danh sách nhóm người dùng" />  
+        <put-attribute name="body" value="/WEB-INF/views/qtht/nhomnguoidung/listNhomUser.jsp" />  
+    </definition>  
+    
+    <!-- listItemNhom Page -->
+    <definition name="nhomnguoidung.listitem" template="/WEB-INF/views/qtht/nhomnguoidung/listItem.jsp">     
+    </definition>  
+       
+    <!-- editNhom Page -->
+    <definition name="nhomnguoidung.editNhom" extends="base.definition">  
+        <put-attribute name="title" value="" />  
+        <put-attribute name="body" value="/WEB-INF/views/qtht/nhomnguoidung/editNhomUser.jsp" />  
+    </definition> 
+    
+    <!-- KhoaHoc Page -->
+    <definition name="khoahoc.list" extends="base.definition">  
+        <put-attribute name="title" value="Danh sách khóa học" />  
+        <put-attribute name="body" value="/WEB-INF/views/phongdaotao/khoahoc/listKhoaHoc.jsp" />  
+    </definition>  
+    
+    <definition name="khoahoc.listitem" template="/WEB-INF/views/phongdaotao/khoahoc/listItem.jsp">     
+    </definition>  
+       
+    <definition name="khoahoc.edit" extends="base.definition">  
+        <put-attribute name="title" value="" />  
+        <put-attribute name="body" value="/WEB-INF/views/phongdaotao/khoahoc/editKhoaHoc.jsp" />  
+    </definition>  
+    <!-- KhoaHoc Page -->
+    
+    <!-- LopHoc Page -->
+    <definition name="lophoc.list" extends="base.definition">  
+        <put-attribute name="title" value="Danh sách lớp học" />  
+        <put-attribute name="body" value="/WEB-INF/views/phongdaotao/lophoc/listLopHoc.jsp" />  
+    </definition>  
+    
+    <definition name="lophoc.listitem" template="/WEB-INF/views/phongdaotao/lophoc/listItem.jsp">     
+    </definition>  
+    
+    <definition name="lophoc.listMon" template="/WEB-INF/views/phongdaotao/lophoc/listMon.jsp">     
+    </definition> 
+    
+    <definition name="lophoc.searchMon" template="/WEB-INF/views/phongdaotao/lophoc/searchMon.jsp">     
+    </definition> 
+       
+    <definition name="lophoc.edit" extends="base.definition">  
+        <put-attribute name="title" value="" />  
+        <put-attribute name="body" value="/WEB-INF/views/phongdaotao/lophoc/editLopHoc.jsp" />  
+    </definition>  
+    <!-- LopHoc Page -->
+    
+    <!-- CoSo Page -->
+    <definition name="coso.list" extends="base.definition">  
+        <put-attribute name="title" value="Danh sách cơ sở" />  
+        <put-attribute name="body" value="/WEB-INF/views/phongdaotao/coso/listCoSo.jsp" />  
+    </definition>   
+       
+    <definition name="coso.edit" extends="base.definition">  
+        <put-attribute name="title" value="" />  
+        <put-attribute name="body" value="/WEB-INF/views/phongdaotao/coso/editCoSo.jsp" />  
+    </definition>  
+    <!-- CoSo Page -->
+    
+     <!-- PhongHoc Page -->
+    <definition name="phonghoc.list" extends="base.definition">  
+        <put-attribute name="title" value="Danh sách phòng học" />  
+        <put-attribute name="body" value="/WEB-INF/views/phongdaotao/phonghoc/listPhongHoc.jsp" />  
+    </definition>  
+    
+    <definition name="phonghoc.listitem" template="/WEB-INF/views/phongdaotao/phonghoc/listItem.jsp">     
+    </definition>  
+       
+    <definition name="phonghoc.edit" extends="base.definition">  
+        <put-attribute name="title" value="" />  
+        <put-attribute name="body" value="/WEB-INF/views/phongdaotao/phonghoc/editPhongHoc.jsp" />  
+    </definition>  
+    <!-- PhongHoc Page -->
+    
+     <!-- User Page -->
+    <definition name="user.list" extends="base.definition">  
+        <put-attribute name="title" value="Danh sách người dùng" />  
+        <put-attribute name="body" value="/WEB-INF/views/phongdaotao/user/listUser.jsp" />  
+    </definition>  
+    
+    <definition name="user.listitem" template="/WEB-INF/views/phongdaotao/user/listItem.jsp">     
+    </definition>  
+    
+    <definition name="user.detail" template="/WEB-INF/views/phongdaotao/user/detail.jsp">     
+    </definition> 
+    
+     <definition name="user.userdetail" template="/WEB-INF/views/phongdaotao/user/userDetail.jsp">     
+    </definition> 
+       
+    <definition name="user.edit" extends="base.definition">  
+        <put-attribute name="title" value="" />  
+        <put-attribute name="body" value="/WEB-INF/views/phongdaotao/user/editUser.jsp" />  
+    </definition>  
+    <!-- User Page -->
+    
+     <!-- monHoc Page -->
+    <definition name="monhoc.list" extends="base.definition">  
+        <put-attribute name="title" value="Danh sách môn học" />  
+        <put-attribute name="body" value="/WEB-INF/views/phongdaotao/monhoc/listMonHoc.jsp" />  
+    </definition>  
+    
+    <definition name="monhoc.listitem" template="/WEB-INF/views/phongdaotao/monhoc/listItem.jsp">     
+    </definition>  
+       
+    <definition name="monhoc.edit" extends="base.definition">  
+        <put-attribute name="title" value="" />  
+        <put-attribute name="body" value="/WEB-INF/views/phongdaotao/monhoc/editMonHoc.jsp" />  
+    </definition>  
+    <!-- monhoc Page -->
+    
+    <!-- TKB Page -->
+    <definition name="tkb.list" extends="base.definition">  
+        <put-attribute name="title" value="Thời khóa biểu" />  
+        <put-attribute name="body" value="/WEB-INF/views/phongdaotao/tkb/listTkb.jsp" />  
+    </definition>  
+    
+    <definition name="tkb.listitem" template="/WEB-INF/views/phongdaotao/tkb/listItem.jsp">     
+    </definition>  
+       
+    <definition name="tkb.edit" extends="base.definition">  
+        <put-attribute name="title" value="" />  
+        <put-attribute name="body" value="/WEB-INF/views/phongdaotao/tkb/editTkb.jsp" />  
+    </definition>  
+    
+    <definition name="tkb.add" extends="base.definition">  
+        <put-attribute name="title" value="" />  
+        <put-attribute name="body" value="/WEB-INF/views/phongdaotao/tkb/addTKB.jsp" />  
+    </definition>
+    <!-- TKB Page -->
+    
+	<!-- Sinh vien Page -->
+    <definition name="sv.tkb.list" extends="base.definition">  
+        <put-attribute name="title" value="Thời khóa biểu" />  
+        <put-attribute name="body" value="/WEB-INF/views/sinhvien/tkb/listTkb.jsp" />  
+    </definition>  
+    
+    <definition name="sv.tkb.listitem" template="/WEB-INF/views/sinhvien/tkb/listItem.jsp">     
+    </definition> 
+    
+    <definition name="sv.phep.listitem" template="/WEB-INF/views/sinhvien/phep/listItem.jsp">     
+    </definition> 
+    
+    <definition name="sv.phep.list" extends="base.definition">  
+        <put-attribute name="title" value="Phép cá nhân" />  
+        <put-attribute name="body" value="/WEB-INF/views/sinhvien/phep/listPhep.jsp" />  
+    </definition> 
+    
+    <definition name="sv.phep.add" extends="base.definition">  
+        <put-attribute name="title" value="" />  
+        <put-attribute name="body" value="/WEB-INF/views/sinhvien/phep/addPhep.jsp" />  
+    </definition>
+    
+    <definition name="sv.lop.list" extends="base.definition">  
+        <put-attribute name="title" value="Danh sách lớp học" />  
+        <put-attribute name="body" value="/WEB-INF/views/sinhvien/lophoc/listLopHoc.jsp" />  
+    </definition>  
+    
+    <definition name="sv.lop.listMon" template="/WEB-INF/views/sinhvien/lophoc/listMon.jsp">     
+    </definition> 
+        
+    <!-- Sinh vien Page -->
+    
+    <!-- Home Page -->
+    <definition name="home.userProfile" template="/WEB-INF/views/home/userProfile.jsp">     
+    </definition> 
+    
+    <definition name="home.userDetail" extends="base.definition">  
+        <put-attribute name="title" value="Thông tin cá nhân" />  
+        <put-attribute name="body" value="/WEB-INF/views/home/userDetail.jsp" />  
+    </definition>
+    
+    <definition name="home.login" template="/WEB-INF/views/home/loginPage.jsp">     
+    </definition> 
+    
+    <definition name="home.denied" extends="base.definition">  
+        <put-attribute name="title" value="Access Denied" />  
+        <put-attribute name="body" value="/WEB-INF/views/home/denied.jsp" />  
+    </definition>
+    
+    <definition name="sv.home" extends="base.definition">  
+        <put-attribute name="title" value="Trang chủ" />  
+        <put-attribute name="body" value="/WEB-INF/views/sinhvien/index.jsp" />  
+    </definition>
+    
+    <definition name="gv.home" extends="base.definition">  
+        <put-attribute name="title" value="Trang chủ" />  
+        <put-attribute name="body" value="/WEB-INF/views/giangvien/index.jsp" />  
+    </definition>
+    
+    <definition name="pdt.home" extends="base.definition">  
+        <put-attribute name="title" value="Trang chủ" />  
+        <put-attribute name="body" value="/WEB-INF/views/phongdaotao/index.jsp" />  
+    </definition>
+    
+    <definition name="admin.home" extends="base.definition">  
+        <put-attribute name="title" value="Trang chủ" />  
+        <put-attribute name="body" value="/WEB-INF/views/phongdaotao/index.jsp" />  
+    </definition>
+    <!-- Home Page -->
+    
+    <!-- ThongBao Page -->
+    <definition name="tb.listGui" extends="base.definition">  
+        <put-attribute name="title" value="Danh sách thông báo" />  
+        <put-attribute name="body" value="/WEB-INF/views/qtht/thongbao/listThongBaoGui.jsp" />  
+    </definition>  
+    
+    <definition name="tb.listNhan" extends="base.definition">  
+        <put-attribute name="title" value="Danh sách thông báo" />  
+        <put-attribute name="body" value="/WEB-INF/views/qtht/thongbao/listThongBaoNhan.jsp" />  
+    </definition>  
+    
+    <definition name="tb.lisitem" template="/WEB-INF/views/qtht/thongbao/listItem.jsp">     
+    </definition> 
+    
+    <definition name="tb.detail" template="/WEB-INF/views/qtht/thongbao/thongBaoDetail.jsp">     
+    </definition>
+    
+    <definition name="tb.loadhome" template="/WEB-INF/views/qtht/thongbao/thongBaoHome.jsp">     
+    </definition>  
+    
+    <definition name="tb.edit" extends="base.definition">  
+        <put-attribute name="title" value="Thêm mói thông báo" />  
+        <put-attribute name="body" value="/WEB-INF/views/qtht/thongbao/editThongBao.jsp" />  
+    </definition> 
+    <!-- ThongBao Page -->
+    
+    <!-- Giang vien Page -->
+    
+    <definition name="gv.lop.list" extends="base.definition">  
+        <put-attribute name="title" value="Danh sách lớp học" />  
+        <put-attribute name="body" value="/WEB-INF/views/giangvien/lophoc/listLopHoc.jsp" />  
+    </definition>  
+    
+    <definition name="gv.lop.viewdiemdanh" template="/WEB-INF/views/giangvien/lophoc/viewDiemDanh.jsp">     
+    </definition>
+    
+    <definition name="gv.lop.viewdiemthi" template="/WEB-INF/views/giangvien/lophoc/viewDiemThi.jsp">     
+    </definition>
+    
+    <definition name="gv.lop.viewnhatky" template="/WEB-INF/views/giangvien/lophoc/viewNhatKy.jsp">     
+    </definition>
+    
+    <definition name="gv.tkb.list" extends="base.definition">  
+        <put-attribute name="title" value="Thời khóa biểu" />  
+        <put-attribute name="body" value="/WEB-INF/views/giangvien/tkb/listTkb.jsp" />  
+    </definition>  
+    
+    <definition name="gv.tkb.listitem" template="/WEB-INF/views/giangvien/tkb/listItem.jsp">     
+    </definition> 
+    
+    <definition name="gv.phep.listitem" template="/WEB-INF/views/giangvien/phep/listItem.jsp">     
+    </definition> 
+    
+    <definition name="gv.phep.list" extends="base.definition">  
+        <put-attribute name="title" value="Phép cá nhân" />  
+        <put-attribute name="body" value="/WEB-INF/views/giangvien/phep/listPhep.jsp" />  
+    </definition>
+        
+    <!-- Giang vien Page -->
+    <!-- WORKTASK Page -->
+    <definition name="wt.list" extends="base.definition">  
+        <put-attribute name="title" value="Danh sách work/task" />  
+        <put-attribute name="body" value="/WEB-INF/views/phongdaotao/worktask/listWT.jsp" />  
+    </definition>
+    <definition name="wt.edit" extends="base.definition">  
+        <put-attribute name="title" value="" />  
+        <put-attribute name="body" value="/WEB-INF/views/phongdaotao/worktask/editWT.jsp" />  
+    </definition>
+    <definition name="wt.viewsv" template="/WEB-INF/views/phongdaotao/worktask/viewSinhVien.jsp">     
+    </definition>
+    
+    <definition name="wt.viewpdt" template="/WEB-INF/views/phongdaotao/worktask/viewPDT.jsp">     
+    </definition>
+    <!-- WORKTASK Page -->
+    
+    <!-- danh gia Page -->
+    <definition name="danhgia.list" extends="base.definition">  
+        <put-attribute name="title" value="Danh sách đánh giá" />  
+        <put-attribute name="body" value="/WEB-INF/views/phongdaotao/danhgia/listDanhGia.jsp" />  
+    </definition>
+    <definition name="danhgia.edit" extends="base.definition">  
+        <put-attribute name="title" value="" />  
+        <put-attribute name="body" value="/WEB-INF/views/phongdaotao/danhgia/editDanhGia.jsp" />  
+    </definition>
+    <definition name="danhgia.viewsv" template="/WEB-INF/views/phongdaotao/danhgia/viewSinhVien.jsp">     
+    </definition>
+     <definition name="danhgia.viewpdt" template="/WEB-INF/views/phongdaotao/danhgia/viewPDT.jsp">     
+    </definition>
+    <!-- danh gia Page -->
+</tiles-definitions> 
