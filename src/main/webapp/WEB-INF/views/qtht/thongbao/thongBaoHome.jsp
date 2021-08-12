@@ -41,6 +41,11 @@
 </div>
 <script> 
     $(document).ready(function(){
+    	<% if(totalCount > 0){%>
+    	$('#countNoti').show();
     	$('#countNoti').text('<%=totalCount%>');
+    	<% }else{%>
+    	$('#countNoti').hide();
+    	<% }%>
     });
 </script>

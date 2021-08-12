@@ -19,8 +19,8 @@
 			class="nav-icon dropdown-toggle" onclick="loadThongBaoHome()" id="alertsDropdown"
 			data-bs-toggle="dropdown">
 				<div class="position-relative">
-					<i class="align-middle" data-feather="bell"></i> <span
-						class="indicator" id="countNoti"></span>
+					<i class="align-middle" data-feather="bell"></i> 
+					<span style="line-height: 18px;" class="indicator" id="countNoti"></span>
 				</div>
 		</a>
 			<div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0"
