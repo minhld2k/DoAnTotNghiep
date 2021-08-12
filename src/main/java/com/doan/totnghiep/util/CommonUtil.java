@@ -11,6 +11,7 @@ import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.mindrot.jbcrypt.BCrypt;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.doan.totnghiep.dto.Menu;
 import com.doan.totnghiep.dto.ThongBaoDTO;
@@ -23,6 +24,7 @@ import com.doan.totnghiep.entities.QuanTri;
 import com.doan.totnghiep.entities.SinhVien;
 import com.doan.totnghiep.entities.ThoiKhoaBieu;
 import com.doan.totnghiep.entities.ThongBao;
+import com.doan.totnghiep.entities.UniFileUpLoads;
 import com.doan.totnghiep.entities.User;
 import com.doan.totnghiep.entities.WorkTaskDetail;
 import com.doan.totnghiep.repositories.CustomRepository;
@@ -31,6 +33,7 @@ import com.doan.totnghiep.services.LopHocService;
 import com.doan.totnghiep.services.QuanTriService;
 import com.doan.totnghiep.services.SinhVienService;
 import com.doan.totnghiep.services.ThongBaoService;
+import com.doan.totnghiep.services.UniFileUpLoadsService;
 import com.doan.totnghiep.services.UserService;
 
 public class CommonUtil {
@@ -42,6 +45,7 @@ public class CommonUtil {
 	public static ThongBaoService tbService = SpringUtils.getBean(ThongBaoService.class);
 	public static UserService userService = SpringUtils.getBean(UserService.class);
 	public static LopHocService lopService = SpringUtils.getBean(LopHocService.class);
+	public static UniFileUpLoadsService uploadService = SpringUtils.getBean(UniFileUpLoadsService.class);
 	
 	public static String getBcrypt(String password){
 		return BCrypt.hashpw(password, BCrypt.gensalt(12));
@@ -374,5 +378,24 @@ public class CommonUtil {
 		default:
 			break;
 		}
+    }
+    
+    public static String SafeStringHTML(String str) {
+        if (str == null) return new String();
+        String temp = str;
+        temp = temp.replaceAll("\'", "&#039;");
+        temp = temp.replaceAll("\"", "&quot;");
+        temp = temp.replaceAll("<", "&lt;");
+        temp = temp.replaceAll(">", "&gt;");
+        temp = temp.replaceAll("[\\\\]", "\\\\\\\\");
+        return temp;
+    }
+    
+    public static UniFileUpLoads uploadFile(MultipartFile fileUpload, int kieu, long doiTuongId, String nguoiTao) {
+    	return uploadService.upload(fileUpload, kieu, doiTuongId, nguoiTao);
+    }
+    
+    public static List<UniFileUpLoads> getUniFileUpLoads(long doiTuongId, int kieu){
+    	return custom.getUniFileUpLoads(doiTuongId, kieu);
     }
 }

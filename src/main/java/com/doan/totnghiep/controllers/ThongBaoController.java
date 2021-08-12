@@ -1,5 +1,9 @@
 package com.doan.totnghiep.controllers;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -7,15 +11,20 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.doan.totnghiep.dto.ThongBaoDTO;
 import com.doan.totnghiep.entities.ThongBao;
+import com.doan.totnghiep.entities.UniFileUpLoads;
 import com.doan.totnghiep.entities.User;
 import com.doan.totnghiep.repositories.CustomRepository;
 import com.doan.totnghiep.services.ParamService;
@@ -119,11 +128,11 @@ public class ThongBaoController {
 	@PostMapping(value = "/thongbao/save")
 	public String saveThongBao(@RequestParam(name = "userId[]", required = false) List<Long> listUserId
 				,@RequestParam(name = "khoaId[]", required = false) List<Long> listKhoaId
-				,@RequestParam(name = "lopId[]", required = false) List<Long> listLopId) {
+				,@RequestParam(name = "lopId[]", required = false) List<Long> listLopId
+				,@RequestParam(name = "tepDinhKem", required = false) MultipartFile file) {
 		User u = (User) session.getAttribute("USERLOGIN");
 		String tieuDe = param.getString("tieuDe", "");
 		String noiDung = param.getString("noiDung", "");
-		
 		ThongBao tb = new ThongBao();
 		tb.setNgaySua(new Date());
 		tb.setNgayTao(new Date());
@@ -153,6 +162,11 @@ public class ThongBaoController {
 				List<Long> lsUserIdByLop = this.custom.getAllUserIdByLopId(long1);
 				CommonUtil.addThongBaoUser(lsUserIdByLop, tb.getId());
 			}
+		}
+		
+		//luu file
+		if(!file.isEmpty()) {
+			CommonUtil.uploadFile(file, 0, tb.getId(), (String) session.getAttribute("USERNAME"));
 		}
 		
 		return "redirect:/thongbao/listgui";
@@ -194,5 +208,26 @@ public class ThongBaoController {
 	@RequestMapping(value = "/thongbao/loadHome")
 	public String loadHome() {
 		return "tb.loadhome";
+	}
+	
+	@RequestMapping(value = "/download")
+	@ResponseBody
+	public ResponseEntity<byte[]> downloadFileCong(){
+		String maSo = param.getString("maSo", "");
+		String folderUpload = "/uploads";
+		if (!maSo.isEmpty()) {
+			try {
+				folderUpload += File.separator + maSo;
+				UniFileUpLoads fileUpLoads = this.custom.getUniFileUploadByMaSo(maSo);
+				File file = new File(folderUpload);
+				return ResponseEntity.ok()
+						.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileUpLoads.getTenFile() + "\"")
+						.contentType(MediaType.valueOf(fileUpLoads.getKieuFile()))
+						.body(Files.readAllBytes(Paths.get(file.getPath())));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
 	}
 }

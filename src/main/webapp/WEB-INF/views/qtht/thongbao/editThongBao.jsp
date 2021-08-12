@@ -12,7 +12,7 @@
 	int truongHopId = (int) request.getAttribute("truongHopId");
 	User _user = (User) session.getAttribute("USERLOGIN");
 %>
-<form action="/thongbao/save" method="post" id="formAdd">
+<form action="/thongbao/save" method="post" id="formAdd" enctype="multipart/form-data">
 	<div class="mb-3">
 		<h1 class="h3 d-inline align-middle"><%= session.getAttribute("title") %></h1>
 	</div>
@@ -30,6 +30,11 @@
 		<div class="form-group">
 			<label for="url" class="col-form-label">Nội dung <strong>*</strong></label> 
 			<textarea rows="2" class="form-control" id="noiDung" name="noiDung"><c:out value="${thongBao.noiDung}"></c:out></textarea>
+		</div>
+		
+		<div class="form-group">
+			<label for="url" class="col-form-label">Tệp đính kèm</label> 
+			<input type="file" name="tepDinhKem" class="form-control" id="isFile" onchange="ajaxGetTenFile();"/>
 		</div>
 		
 		<div class="form-group" style="margin-bottom: 10px;">
@@ -92,6 +97,9 @@ $(document).ready(function(){
 	});
 	<% } %>
 });
+$.validator.addMethod("checkTotalSizeFile", function (value, element) {
+    return checkTotalSizeFile();
+}, "Dung lượng tối đa 10 MB.");
 jQuery("#formAdd").validate({
 	rules: {
 		tieuDe:{
@@ -99,6 +107,9 @@ jQuery("#formAdd").validate({
 		},
 		noiDung:{
 			required: true
+		},
+		tepDinhKem:{
+			checkTotalSizeFile : true
 		}
 	},
 	messages: {
@@ -119,4 +130,42 @@ jQuery("#formAdd").validate({
 	return false; 
 	}
 });
+
+function ajaxGetTenFile(){
+	$("#isFile").removeClass('selected');
+	$("#isFile").parent().find(".help-inline").remove();
+	var _c = $('#isFile').val();
+	if(_c != 0){
+		var _file = $('#isFile')[0].files, _fileN = '';
+		for (var i = 0; i < _file.length; i++) {
+			_c = _file[i].name.split('\\');
+			_c = _c[_c.length-1];
+			if (_c.length>23){
+				_c = _c.substr(0, 10) + "..." + _c.substr(_c.length -10, 10);
+			}
+			if(i < _file.length - 1) {
+				_c = _c.concat("<br>");
+			}
+			_fileN = _fileN + (_file.length > 1 ? "- " : "") + _c;
+		}
+		$('#tenFile').val(_fileN);
+	}else{
+		$('#tenFile').val("");
+	}
+}
+
+function checkTotalSizeFile(){
+	var maxSize = 10;
+	var flagg = true;
+	$('#formAdd input[type = file]').each(function(){
+		var c = $(this).val();
+		if(c != 0){
+			fileSize = this.files[0].size;
+			if(fileSize > maxSize*1024*1024){
+				flagg = false;
+			}
+		}
+ 	});
+	return flagg;
+}
 </script>

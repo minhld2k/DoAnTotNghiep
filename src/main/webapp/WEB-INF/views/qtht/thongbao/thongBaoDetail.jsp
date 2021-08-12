@@ -1,3 +1,4 @@
+<%@page import="com.doan.totnghiep.entities.UniFileUpLoads"%>
 <%@page import="org.json.JSONArray"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.doan.totnghiep.entities.ThongBao"%>
@@ -41,6 +42,20 @@
 	     		<p><%=tb.getNoiDung()%></p>
 			</div>					 
 		</li>
+	<% 
+		List<UniFileUpLoads> lsFile = CommonUtil.getUniFileUpLoads(tb.getId(), 0);
+		if(lsFile != null && lsFile.size() > 0){
+			for(int i = 0; i<lsFile.size();i++){
+				UniFileUpLoads file = lsFile.get(i); %>
+		<li>
+			<div class="label-nd">Tệp đính kèm</div>
+			<div class="nd-tt">
+	     		<p><a href="<%=file.getLinkFile()%>" download><i class="fa fa-download"></i><%=file.getTenFile() %></a></p>
+			</div>					 
+		</li>
+	<% 		}
+		}
+	%>
 	<%	if(loaiDS == 1){ %>	
 		<li>
 			<div class="label-nd">Người nhận</div>

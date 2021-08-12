@@ -34,6 +34,7 @@ import com.doan.totnghiep.entities.PhongHoc;
 import com.doan.totnghiep.entities.SinhVienDanhGia;
 import com.doan.totnghiep.entities.SinhVienWorkTask;
 import com.doan.totnghiep.entities.ThoiKhoaBieu;
+import com.doan.totnghiep.entities.UniFileUpLoads;
 import com.doan.totnghiep.entities.WorkTask;
 import com.doan.totnghiep.entities.WorkTaskDetail;
 import com.doan.totnghiep.util.CommonUtil;
@@ -1100,5 +1101,20 @@ public class CustomRepository {
 				+ " 	AND tkb.monid = " + tkb.getMon().getId()
 				+ " 	AND tkb.lopid = " + tkb.getLop().getId();
 		return _jdbcTemplate.queryForObject(sql, Integer.class);
+	}
+	
+	public UniFileUpLoads getUniFileUploadByMaSo(String maSo) {
+		String sql = " SELECT * FROM qtht_filedinhkem WHERE maso = '"+maSo +"' ";
+		List<UniFileUpLoads> lsFile = _jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<UniFileUpLoads>(UniFileUpLoads.class));
+		if (lsFile != null && lsFile.size() > 0) {
+			return lsFile.get(0);
+		}
+		return null;
+	}
+	
+	public List<UniFileUpLoads> getUniFileUpLoads(long doiTuongId, long kieu){
+		String sql = " SELECT * FROM qtht_filedinhkem WHERE doituongid = "+doiTuongId +" AND kieu = "+ kieu;
+		List<UniFileUpLoads> lsFile = _jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<UniFileUpLoads>(UniFileUpLoads.class));
+		return lsFile;
 	}
 }
