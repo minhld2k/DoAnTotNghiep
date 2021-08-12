@@ -192,6 +192,7 @@ public class SinhVienController {
 			String _url = param.getServletPath();
 			if (CommonUtil.checkQuyen(_url, _u)) {
 				SinhVien sv = this.sinhVienService.getSinhVien(_u.getId());
+				param.setAttribute("isThongBao", param.getInt("isThongBao", 0));
 				param.setAttribute("LopSV", sv.getLop());
 				return "sv.lop.list";
 			}else {

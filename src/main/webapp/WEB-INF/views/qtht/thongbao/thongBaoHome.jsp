@@ -21,7 +21,7 @@
 	for(int i = 0; i < lsData.size(); i++){ 
 		ThongBao tb = CommonUtil.getThongBaoById(lsData.get(i).getId());
 		%>
-		<a onclick="loadChiTietThongBao(2,'<%=tb.getId() %>',1);" class="list-group-item" style="font-weight: bold;">
+		<a onclick="viewThongBao('<%=tb.getId() %>',1,'<%=tb.getLoai() %>','<%=_u.getNhomid() %>');" class="list-group-item" style="font-weight: bold;">
 			<div class="row g-0 align-items-center">
 				<div class="col-1">
 					<i class="far fa-bell"></i>

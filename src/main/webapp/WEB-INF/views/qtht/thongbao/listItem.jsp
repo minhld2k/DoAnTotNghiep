@@ -1,3 +1,4 @@
+<%@page import="com.doan.totnghiep.entities.User"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.doan.totnghiep.entities.ThongBao"%>
 <%@page import="com.doan.totnghiep.util.CommonUtil"%>
@@ -12,6 +13,7 @@ int loaiDS = (int) request.getAttribute("loaiDS");
 String addOrEditUrl = "/thongbao/addOrEdit";
 int count = (int) request.getAttribute("count");
 int totalCount = (int) request.getAttribute("totalCount");
+User _u = (User) session.getAttribute("USERLOGIN");
 %>
 
 <% if (lsThongBao != null && lsThongBao.size() > 0) { 
@@ -28,7 +30,7 @@ int totalCount = (int) request.getAttribute("totalCount");
 					<p><%=tb.getTieuDe()%></p>
 				</div>
 			<% }else if(loaiDS == 2){ %>
-			<div id="sent<%=tb.getId() %>" onclick="loadChiTietThongBao(2,'<%=tb.getId()%>',0)" style='<%= lsThongBao.get(i).getTrangThai() == 0 ? "font-weight: bold;" : "" %>'>
+			<div id="sent<%=tb.getId() %>" onclick="viewThongBao('<%=tb.getId() %>',0,'<%=tb.getLoai() %>','<%=_u.getNhomid() %>');" style='<%= lsThongBao.get(i).getTrangThai() == 0 ? "font-weight: bold;" : "" %>'>
 				<div>
 					<p><%= CommonUtil.getTenNguoiDungByUserId(tb.getUser().getId(), tb.getUser().getNhomid()) %><span style="float: right;"><%= new SimpleDateFormat("dd/MM/yyyy HH:mm").format(tb.getNgaySua()) %></span></p>
 				</div>

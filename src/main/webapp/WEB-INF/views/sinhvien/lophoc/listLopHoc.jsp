@@ -4,6 +4,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
 	LopHoc lop = (LopHoc) request.getAttribute("LopSV");
+	int isThongBao = (int) request.getAttribute("isThongBao");
 %>
 <div class="container-fluid p-0">
 	<div class="mb-3">
@@ -47,9 +48,11 @@
 <div class="uni-loading" style="display: none;"></div>
 <div class="uni-loading-top" style="display: none"></div>
 <script type="text/javascript">
-var tenLop = '';
-var khoaHocId = 0;
-var ajaxRuning = 0;
+<% if(isThongBao == 1) {%>
+	$(document).ready(function(){
+		xemMonHoc('<%= lop.getId()%>');
+	});
+<% }%>
 
 function xemMonHoc(lopId) {
 	var url = "/sinhvien/lop/xemMonHoc";

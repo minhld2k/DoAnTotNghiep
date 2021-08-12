@@ -8,9 +8,11 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.doan.totnghiep.dto.ThongBaoDTO;
 import com.doan.totnghiep.entities.ThongBao;
@@ -158,20 +160,35 @@ public class ThongBaoController {
 	
 	@RequestMapping(value = "/thongbao/xemChiTiet")
 	public String xemChiTietThongBao() {
-		User u = (User) session.getAttribute("USERLOGIN");
 		long tbId = param.getLong("thongBaoId", 0);
 		int loaiDS = param.getInt("loaiDS", 0);
 		if (tbId > 0) {
 			ThongBao tb = this.thongBaoService.getThongBao(tbId);
-			if (loaiDS == 2) {
-				this.custom.upDateTrangThaiThongBao(tbId, u.getId());
-			}
 			
 			param.setAttribute("loaiDS", loaiDS);
 			param.setAttribute("ThongBaoDetail", tb);
 			return "tb.detail";
 		}
 		return "";
+	}
+	
+	@GetMapping(value = "/thongbao/setDaXem")
+	@ResponseBody
+	public String setDaXem() {
+		int kq = 0;
+		User u = (User) session.getAttribute("USERLOGIN");
+		long tbId = param.getLong("thongBaoId", 0);
+		if (tbId > 0) {
+			this.custom.upDateTrangThaiThongBao(tbId, u.getId());
+			kq = 1;
+		}else {
+			List<ThongBaoDTO> listThongBao = this.custom.getThongBaoByUserId(u.getId(), 0, "", -1, -1);
+			for (ThongBaoDTO thongBaoDTO : listThongBao) {
+				this.custom.upDateTrangThaiThongBao(thongBaoDTO.getId(), u.getId());
+			}
+			kq = 1;
+		}
+		return String.valueOf(kq);
 	}
 	
 	@RequestMapping(value = "/thongbao/loadHome")

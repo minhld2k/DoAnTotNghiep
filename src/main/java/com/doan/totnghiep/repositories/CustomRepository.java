@@ -917,7 +917,7 @@ public class CustomRepository {
 			sql.append("	AND m.giangvienid = " + giangVienId + " ");
 		}
 		if (!tuNgay.equals("")) {
-			sql.append("	AND p.tungay >= CAST('" + tuNgay+"' as TIMESTAMP) ");
+			sql.append("	AND p.denngay >= CAST('" + tuNgay+"' as TIMESTAMP) ");
 		}
 		sql.append(" ORDER BY trangthai,tungay desc ");
 		

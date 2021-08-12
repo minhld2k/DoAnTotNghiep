@@ -92,10 +92,51 @@ function loadChiTietThongBao(loaiDS,thongBaoId,isHome) {
 						var element = document.getElementById('sent'+thongBaoId);
 						element.style.removeProperty("font-weight");
 					}
-					$("#countNoti").html($("#countNoti").html() - 1);
 				}
 				$(_uniwindow).html(results);
 			}
+		},
+		error: function () {
+			console.log("Error");
+		}
+	});	
+}
+
+function viewThongBao(thongBaoId,isHome,loaiTB,nhomId){
+	setDaXem(thongBaoId);
+	if(loaiTB == 0){
+		loadChiTietThongBao(2,thongBaoId,isHome);
+	}
+	if(loaiTB == 1){
+		if(nhomId = 1){
+			location.href = "/sinhvien/tkb";
+		}else{
+			location.href = "/giangvien/tkb";
+		}
+	}
+	if(loaiTB == 2){
+		if(nhomId = 2){
+			location.href = "/giangvien/phepSV";
+		}else{
+			location.href = "/phongdaotao/phepSV";
+		}
+	}
+	if(loaiTB == 5 || loaiTB == 4 || loaiTB == 3){
+		location.href = "/sinhvien/lop?isThongBao=1";
+	}
+}
+
+function setDaXem(thongBaoId){
+	$.ajax({
+		async: true,
+		url: "/thongbao/setDaXem",
+		type: "GET",
+		dataType: "html",
+		data: {
+			'thongBaoId' : thongBaoId
+		},
+		success: function(results) {
+			loadThongBaoHome();
 		},
 		error: function () {
 			console.log("Error");
