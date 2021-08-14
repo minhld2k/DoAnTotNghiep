@@ -597,6 +597,13 @@ public class PhongDaoTaoController {
 				user = this.userService.getUser(id);
 				user.setNguoiSua((String) session.getAttribute("USERNAME"));
 				user.setNgaySua(new Date());
+				String password = param.getString("passwordNew", "");
+				String rePass = param.getString("rePassNew", "");
+				if (password.equals(rePass) && !password.equals("")) {
+					user.setPassword(CommonUtil.getBcrypt(password));
+				}else {
+					return "redirect:/phongdaotao/user/addOrEdit";
+				}
 			}else {
 				user.setStatus(0);
 				user.setNgayTao(new Date());

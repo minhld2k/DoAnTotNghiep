@@ -32,10 +32,13 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public boolean checkLogin(String username, String password) {
-		User user = this.findByUsername(username).get(0);
-		if (null != user && CommonUtil.checkBcrypt(password, user.getPassword())) {
-			return true;
-		}	
+		try {
+			User user = this.findByUsername(username).get(0);
+			if (null != user && CommonUtil.checkBcrypt(password, user.getPassword())) {
+				return true;
+			}	
+		} catch (Exception e) {
+		}
 		return false;
 	}
 }

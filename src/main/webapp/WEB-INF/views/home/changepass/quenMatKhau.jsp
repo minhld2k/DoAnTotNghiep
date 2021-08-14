@@ -24,41 +24,25 @@
 					<div class="d-table-cell align-middle">
 
 						<div class="text-center mt-4">
-							<h1 class="h2">Chào mừng bạn đã đến với Ispace</h1>
 							<p class="lead">
-								Đăng nhập vào tài khoản của bạn để tiếp tục
+								Nhập tên đăng nhập để tiếp tục
 							</p>
 						</div>
 
 						<div class="card">
 							<div class="card-body">
 								<div class="m-sm-4">
-									<form action="/checkLogin" method="post"> 
+									<form action="/quenMatKhau" method="post"> 
 										<div class="mb-3">
 											<label class="form-label">Tên đăng nhập</label>
 											<input class="form-control form-control-lg" type="text" name="username" />
 										</div>
-										<div class="mb-3">
-											<label class="form-label">Mật khẩu</label>
-											<input class="form-control form-control-lg" type="password" name="password" />
-											<!-- <small>
-									            <a href="pages-reset-password.html">Forgot password?</a>
-									        </small> -->
-										</div>
-										<a href="/quenMatKhau">Quên mật khẩu</a>
+										
 										<div>
-											<label class="form-label" style="color: red;"><c:out value="${MESSAGE}" /></label>
+											<label class="form-label" style="color: red;"><c:out value="${ERROR_USERNAME}" /></label>
 										</div>
-										<!-- <div>
-											<label class="form-check">
-									            <input class="form-check-input" type="checkbox" value="remember-me" name="remember-me" checked>
-									            <span class="form-check-label">
-									              Remember me next time
-									            </span>
-									          </label>
-										</div> -->
 										<div class="text-center mt-3">
-										 	<button type="submit" class="btn btn-lg btn-primary">Đăng nhập</button>
+										 	<button type="submit" class="btn btn-lg btn-primary">Tiếp tục</button>
 										</div>
 									</form>
 								</div>

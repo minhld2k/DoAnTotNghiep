@@ -7,10 +7,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.mindrot.jbcrypt.BCrypt;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.doan.totnghiep.dto.Menu;
@@ -46,6 +49,12 @@ public class CommonUtil {
 	public static UserService userService = SpringUtils.getBean(UserService.class);
 	public static LopHocService lopService = SpringUtils.getBean(LopHocService.class);
 	public static UniFileUpLoadsService uploadService = SpringUtils.getBean(UniFileUpLoadsService.class);
+	public static JavaMailSender javaMailSender = SpringUtils.getBean(JavaMailSender.class);
+	
+	private static final String alpha = "abcdefghijklmnopqrstuvwxyz"; // a-z
+    private static final String alphaUpperCase = alpha.toUpperCase(); // A-Z
+    private static final String digits = "0123456789"; // 0-9
+    private static final String ALPHA_NUMERIC = alpha + alphaUpperCase + digits;
 	
 	public static String getBcrypt(String password){
 		return BCrypt.hashpw(password, BCrypt.gensalt(12));
@@ -398,4 +407,38 @@ public class CommonUtil {
     public static List<UniFileUpLoads> getUniFileUpLoads(long doiTuongId, int kieu){
     	return custom.getUniFileUpLoads(doiTuongId, kieu);
     }
+    
+    private static Random generator = new Random();
+    public static int randomNumber(int min, int max) {
+        return generator.nextInt((max - min) + 1) + min;
+    }
+    public static String randomAlphaNumeric(int numberOfCharactor) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < numberOfCharactor; i++) {
+            int number = randomNumber(0, ALPHA_NUMERIC.length() - 1);
+            char ch = ALPHA_NUMERIC.charAt(number);
+            sb.append(ch);
+        }
+        return sb.toString();
+    }
+    
+    
+    public static String sendMail(String email) {
+    	String code = randomAlphaNumeric(6);
+    	try {
+    		SimpleMailMessage msg = new SimpleMailMessage();
+    		msg.setTo(email);
+    		msg.setSubject("Hệ thống Quản lý sinh viên trường Ispace - quên mật khẩu");
+    		msg.setText("Kính gửi: Quý Ông/Bà, \r\n "
+    				+ "Mã xác nhận: "+ code + "\r\n"
+    				+" Thông báo này được gửi tự động từ hệ thống Quản lý sinh viên, vui lòng không phản hồi lại email này.\r\n"
+    				+ "Trân trọng!");
+    		javaMailSender.send(msg);
+        	return code;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	return "";
+	}
+	 
 }

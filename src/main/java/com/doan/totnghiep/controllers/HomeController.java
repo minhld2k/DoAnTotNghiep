@@ -287,4 +287,66 @@ public class HomeController {
 		}
 		return String.valueOf(kq);
 	}
+	
+	@GetMapping("/quenMatKhau")
+	public String viewFormQMK() {
+		return "home.qmk";
+	}
+	
+	@RequestMapping("/formXacNhan")
+	public String viewFormXacNhan() {
+		return "home.xacnhan";
+	}
+	
+	@PostMapping("/quenMatKhau")
+	public String viewNext() {
+		String username = param.getString("username", "");
+		if (!username.equals("")) {
+			try {
+				User u = this.userService.findByUsername(username).get(0);
+				if (u != null) {
+					String email = u.getEmail();
+					String code = CommonUtil.sendMail(email);
+					session.setAttribute("EMAIL", email);
+					session.setAttribute("Code", code);
+					session.setAttribute("username", username);
+					session.removeAttribute("ERROR_USERNAME");
+					return "redirect:/formXacNhan";
+				}
+			} catch (Exception e) {
+				session.setAttribute("ERROR_USERNAME", "Tên đăng nhập không tồn tại");
+				return "redirect:/quenMatKhau";
+			}
+		}else {
+			session.setAttribute("ERROR_USERNAME", "Tên đăng nhập không tồn tại");
+			return "redirect:/quenMatKhau";
+		}
+		return "";
+	}
+	
+	@GetMapping("/viewChangPass")
+	public String viewChangPass() {
+		return "home.changepass";
+	}
+	
+	@PostMapping("/changePass")
+	public String changPass() {
+		String username = (String) session.getAttribute("username");
+		String password = param.getString("passwordNew", "");
+		String rePass = param.getString("rePassNew", "");
+		
+		if (!username.equals("")) {
+			try {
+				User u = this.userService.findByUsername(username).get(0);
+				if (u != null && password.equals(rePass) && !password.equals("")) {
+					u.setPassword(CommonUtil.getBcrypt(password));
+					this.userService.update(u);
+				}
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+		}
+		
+		return "redirect:/login";
+	}
 }

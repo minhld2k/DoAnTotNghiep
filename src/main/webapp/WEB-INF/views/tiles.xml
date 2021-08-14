@@ -202,6 +202,15 @@
     <definition name="home.userProfile" template="/WEB-INF/views/home/userProfile.jsp">     
     </definition> 
     
+    <definition name="home.xacnhan" template="/WEB-INF/views/home/changepass/xacNhan.jsp">     
+    </definition>
+    
+    <definition name="home.qmk" template="/WEB-INF/views/home/changepass/quenMatKhau.jsp">     
+    </definition>
+    
+    <definition name="home.changepass" template="/WEB-INF/views/home/changepass/changePass.jsp">     
+    </definition>
+    
     <definition name="home.userDetail" extends="base.definition">  
         <put-attribute name="title" value="Thông tin cá nhân" />  
         <put-attribute name="body" value="/WEB-INF/views/home/userDetail.jsp" />  

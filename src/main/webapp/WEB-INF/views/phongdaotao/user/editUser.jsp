@@ -95,6 +95,16 @@
 				<label for="name" class="col-form-label">Xác nhận mật khẩu<strong>*</strong></label> 
 				<input type="password" class="form-control" id="rePass" name="rePass" value="" />
 			</div>			
+		<% }else{ %>
+			<div class="form-group">
+				<label for="name" class="col-form-label">Mật khẩu</label> 
+				<input type="password" class="form-control" id="passwordNew" name="passwordNew" value="" />
+			</div>
+			
+			<div class="form-group">
+				<label for="name" class="col-form-label">Xác nhận mật khẩu</label> 
+				<input type="password" class="form-control" id="rePassNew" name="rePassNew" value="" />
+			</div>
 		<% } %>
 				
 		<div style="text-align: right;margin-top: 10px;">
@@ -168,6 +178,9 @@ jQuery("#formAdd").validate({
 			equalTo: "#password",
 			required: true,
 		},
+		rePassNew:{
+			equalTo: "#passwordNew",
+		}
 		
 	},
 	messages: {
@@ -181,6 +194,9 @@ jQuery("#formAdd").validate({
 		},
 		rePass : {
 			required: "Trường bắt buộc không được để trống",
+			equalTo: "Xác nhận mật khẩu không chính xác"
+		},
+		rePassNew : {
 			equalTo: "Xác nhận mật khẩu không chính xác"
 		}
 	},
