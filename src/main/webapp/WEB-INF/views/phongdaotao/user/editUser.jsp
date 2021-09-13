@@ -146,7 +146,29 @@ jQuery.validator.addMethod("checkTrungMa", function(value, element) {
 		dataType : "json",
 		data : {
 			'userId' : id,
-			'khoa' : value 
+			'khoa' : value ,
+			'loai' : '1'
+		},
+		success : function(data) {
+			check = parseInt(data) > 0 ? false : true;
+		}
+	});
+	return check;
+	
+}, "");
+
+jQuery.validator.addMethod("checkTrungMaSV", function(value, element) {
+	var id = $("#idAdd").val() == "" ? 0 : $("#idAdd").val();
+	var check = false;
+	$.ajax({
+		url : '/phongdaotao/user/checkma',
+		type: "POST",
+		async: false,
+		dataType : "json",
+		data : {
+			'userId' : id,
+			'khoa' : value,
+			'loai' : '2'
 		},
 		success : function(data) {
 			check = parseInt(data) > 0 ? false : true;
@@ -158,6 +180,10 @@ jQuery.validator.addMethod("checkTrungMa", function(value, element) {
 
 jQuery("#formAdd").validate({
 	rules: {
+		maSV : {
+			required: true,
+			checkTrungMaSV: true
+		},
 		hoTen:{
 			required: true
 		},
@@ -184,6 +210,10 @@ jQuery("#formAdd").validate({
 		
 	},
 	messages: {
+		maSV: {
+			required : "Trường bắt buộc không được để trống",
+			checkTrungMaSV : "Mã sinh viên đã tồn tại"
+		},
 		hoTen: 'Trường bắt buộc không được để trống',
 		nhomId : 'Trường bắt buộc không được để trống',
 		lopId : 'Trường bắt buộc không được để trống',

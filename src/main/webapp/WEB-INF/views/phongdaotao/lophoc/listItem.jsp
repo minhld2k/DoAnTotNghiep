@@ -36,10 +36,15 @@ User _user = (User) session.getAttribute("USERLOGIN");
 						Môn học
 					</button>
 				<% } %>
-				<button id="btChonFi" type="button" onclick="viewNhatKy('<%=lopHoc.getId() %>')"
+				<button id="btChonFi" type="button" onclick="viewNhatKy('<%=lopHoc.getId() %>',1)"
 					class="btn-xemdv" style="display: inline-block;margin: 0 3px 3px 0px;" title="" >
 					Nhật ký lên lớp
 				</button>
+				<% if(CommonUtil.checkQuyenByKhoa(_user.getId(), "NHAP_DIEM")){ %>
+					<button class="btn btn-xemdv" style="margin: 0 3px 3px 0px;" onclick="viewNhatKy('<%=lopHoc.getId() %>',2)">
+						Nhập điểm
+					</button>
+				<% } %>
 				<% if(CommonUtil.checkQuyenByKhoa(_user.getId(), "LIST_TKB")){ %>
 					<a id="btChonFi" class="btn btn-xemdv chonTaiLieuCaNhan" style="display: inline-block" title="" href="/phongdaotao/tkb/list?lopId=<%=lopHoc.getId()%>">
 						TKB

@@ -28,6 +28,7 @@ import com.doan.totnghiep.entities.DiemThi;
 import com.doan.totnghiep.entities.GiangVien;
 import com.doan.totnghiep.entities.KhoaHoc;
 import com.doan.totnghiep.entities.LopHoc;
+import com.doan.totnghiep.entities.NgoaiHeThong;
 import com.doan.totnghiep.entities.NhatKy;
 import com.doan.totnghiep.entities.NhomNguoiDung;
 import com.doan.totnghiep.entities.PhongHoc;
@@ -550,23 +551,24 @@ public class CustomRepository {
 	
 	public List<Object[]> getMonHocByLopId(long lopId,int trangThai){
 		StringBuilder sql = new StringBuilder();
-		sql.append(" SELECT m.id as id ,m.ten as ten , ml.trangthai as trangthai, ml.id as mlid FROM qlsv_monhocs m ")
+		sql.append(" SELECT m.id as id ,m.ten as ten , ml.trangthai as trangthai, ml.id as mlid, ml.hocky FROM qlsv_monhocs m ")
 			.append(" INNER JOIN qlsv_lophoc_monhoc ml on m.id = ml.monid ")
 			.append(" WHERE m.daxoa = 0 ")
 			.append("	AND ml.lopid = " + lopId + " ");
 			if(trangThai > 0) {
 				sql.append(" AND ml.trangthai != " + trangThai + " ");
 			}
-			sql.append("	ORDER BY ml.trangthai ");
+			sql.append("	ORDER BY ml.hocky desc, ml.trangthai ");
 		
 		List<Object[]> results = new ArrayList<Object[]>();
 		List<Map<String, Object>> rows = _jdbcTemplate.queryForList(sql.toString());
 		for (Map<String, Object> map : rows) {
-			Object[] objects = new Object[4];
+			Object[] objects = new Object[5];
 			objects[0] = Long.parseLong(map.get("id").toString());
 			objects[1] = map.get("ten").toString();
 			objects[2] = map.get("trangthai").toString();
 			objects[3] = Long.parseLong(map.get("mlid").toString());
+			objects[4] = Integer.parseInt(map.get("hocky").toString());
 			results.add(objects);
 		}
 		return results;
@@ -590,7 +592,7 @@ public class CustomRepository {
 		.append(" WHERE m.daxoa = 0 ")
 		.append("	AND ml.lopid = " + lopId + " ")
 		.append("	AND ml.monid = " + monId + " ")
-		.append("	AND ml.trangthai in (0,1) ");
+		.append("	AND ml.trangthai in (0,1,2) ");
 		return _jdbcTemplate.queryForObject(sql.toString(), Integer.class);
 	}
 	
@@ -1117,4 +1119,111 @@ public class CustomRepository {
 		List<UniFileUpLoads> lsFile = _jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<UniFileUpLoads>(UniFileUpLoads.class));
 		return lsFile;
 	}
+	
+	public List<Object[]> getDataWTByLopId(long lopId,long monId){
+		StringBuilder sql = new StringBuilder();
+		sql.append("SELECT sv.id ")
+			.append("	, ( ")
+			.append("		SELECT COUNT(*) FROM qlsv_sinhvien_worktask svwt ")
+			.append("			LEFT JOIN qlsv_worktask_detail wtd ON wtd.id = svwt.worktaskdetailid ")
+			.append("			LEFT JOIN qlsv_worktasks wt ON wt.id = wtd.worktaskid ")
+			.append("		WHERE svwt.ketqua = 1  ")
+			.append("			AND svwt.sinhvienid = sv.id ") 
+			.append("			AND wt.monid = " + monId)
+			.append("			AND wtd.daxoa = 0 ")
+			.append("	  ) as lamtot ")
+			.append("	 , ( ")
+			.append("		SELECT COUNT(*) FROM qlsv_sinhvien_worktask svwt ")
+			.append("			LEFT JOIN qlsv_worktask_detail wtd ON wtd.id = svwt.worktaskdetailid ")
+			.append("			LEFT JOIN qlsv_worktasks wt ON wt.id = wtd.worktaskid ")
+			.append("		WHERE svwt.ketqua = 2 ")
+			.append("			AND svwt.sinhvienid = sv.id ")
+			.append("			AND wt.monid = " + monId)
+			.append("		 	AND wtd.daxoa = 0 ")
+			.append("	  ) as lamduoc ")
+			.append("	 , (  ")
+			.append("		SELECT COUNT(*) FROM qlsv_sinhvien_worktask svwt ")
+			.append("			LEFT JOIN qlsv_worktask_detail wtd ON wtd.id = svwt.worktaskdetailid ")
+			.append("			LEFT JOIN qlsv_worktasks wt ON wt.id = wtd.worktaskid ")
+			.append("		WHERE svwt.ketqua = 3  ")
+			.append("			AND svwt.sinhvienid = sv.id  ")
+			.append("			AND wt.monid = "+monId)
+			.append("		 	AND wtd.daxoa = 0 ")
+			.append("	  ) as chuaduoc  ")
+			.append("FROM qlsv_sinhviens sv  ")
+			.append("LEFT JOIN qlsv_lophocs l ON l.id = sv.lopid  ")
+			.append("WHERE sv.lopid = "+lopId)
+			.append("  AND sv.daxoa = 0 ")
+			.append("GROUP BY sv.id  ");
+		System.out.println("sql: " + sql.toString());
+		
+		List<Object[]> results = new ArrayList<Object[]>();
+		List<Map<String, Object>> rows = _jdbcTemplate.queryForList(sql.toString());
+		for (Map<String, Object> map : rows) {
+			Object[] objects = new Object[4];
+			objects[0] = Long.parseLong(map.get("id").toString());
+			objects[1] = Integer.parseInt(map.get("lamtot").toString());
+			objects[2] = Integer.parseInt(map.get("lamduoc").toString());
+			objects[3] = Integer.parseInt(map.get("chuaduoc").toString());
+			results.add(objects);
+		}
+		return results;
+	}
+	
+	public NgoaiHeThong getDiemBySinhVienId(long sinhVienId) {
+		StringBuilder sql = new StringBuilder();
+		sql.append(" SELECT * FROM qlsv_diemngoaihethongs ")
+			.append(" WHERE sinhvienid = " + sinhVienId);
+		
+		List<NgoaiHeThong> lsLopHoc = _jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper<NgoaiHeThong>(NgoaiHeThong.class));
+		if (lsLopHoc != null && lsLopHoc.size() > 0) {
+			return lsLopHoc.get(0);
+		}
+		return new NgoaiHeThong();
+	}
+	
+	public List<Object[]> getMonHocByLopAndHocKy(int hocKy, long lopId){
+		StringBuilder sql = new StringBuilder();
+		sql.append(" select m.id,m.ten,lm.hocky,m.sotiet from qlsv_lophoc_monhoc lm ")
+			.append(" INNER JOIN qlsv_monhocs m ON m.id = lm.monid ")
+			.append(" where trangthai = 2 ")
+			.append(" AND m.daxoa = 0 ")
+			.append(" AND lm.hocky = " + hocKy)
+			.append(" AND lopid = " + lopId);
+		List<Object[]> results = new ArrayList<Object[]>();
+		List<Map<String, Object>> rows = _jdbcTemplate.queryForList(sql.toString());
+		for (Map<String, Object> map : rows) {
+			Object[] objects = new Object[4];
+			objects[0] = Long.parseLong(map.get("id").toString());
+			objects[1] = map.get("ten").toString();
+			objects[2] = Integer.parseInt(map.get("hocky").toString());
+			objects[3] = Integer.parseInt(map.get("sotiet").toString());
+			results.add(objects);
+		}
+		return results;
+	}
+	
+	public List<Object[]> getDiemThi(int hocKy, long lopId,long sinhVienId){
+		StringBuilder sql = new StringBuilder();
+		sql.append(" select m.id,m.sotiet,d.lythuyet,d.thuchanh FROM qlsv_diemthis d ")
+			.append(" INNER JOIN qlsv_lophoc_monhoc lm ON lm.id = d.lopmonid ")
+			.append(" INNER JOIN qlsv_monhocs m ON m.id = lm.monid ")
+			.append(" where trangthai = 2 ")
+			.append(" AND m.daxoa = 0 ")
+			.append(" AND lm.hocky = " + hocKy)
+			.append(" AND d.sinhvienid = " + sinhVienId)
+			.append(" AND lm.lopid = " + lopId);
+		List<Object[]> results = new ArrayList<Object[]>();
+		List<Map<String, Object>> rows = _jdbcTemplate.queryForList(sql.toString());
+		for (Map<String, Object> map : rows) {
+			Object[] objects = new Object[4];
+			objects[0] = Long.parseLong(map.get("id").toString());
+			objects[1] = Integer.parseInt(map.get("sotiet").toString());
+			objects[2] = map.get("lythuyet").toString();
+			objects[3] = map.get("thuchanh").toString();
+			results.add(objects);
+		}
+		return results;
+	}
+	
 }

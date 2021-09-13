@@ -27,14 +27,16 @@
 			
 	            <div class="nd-tt">
 	            	<div class="d-td">
-						<p class="id">Tên môn học: </p>
+						<p class="id">Tên môn học </p>
 						<p><%=listMonHoc.get(itemYCBS)[1].toString() %></p>
+						<p class="id">Học kỳ</p>
+						<p><%= listMonHoc.get(itemYCBS)[4].toString() %></p>
 						<p class="id">Trạng thái</p>
 						<p><%= Constant.getTrangThaiMonHoc(Integer.parseInt(listMonHoc.get(itemYCBS)[2].toString())) %></p>
 						<p>
 							<div class="btn-dvc">
 							 	<div>
-							 	<% if(CommonUtil.checkQuyenByKhoa(_user.getId(), "DELETE_MONHOC_LOPHOC")){ %>
+							 	<% if(CommonUtil.checkQuyenByKhoa(_user.getId(), "DELETE_MONHOC_LOPHOC") && Integer.parseInt(listMonHoc.get(itemYCBS)[2].toString()) != 2){ %>
 									<button class="btn-xemdv" style="margin: 0 3px 3px 0px;" onclick="deleteMon('<%=lopId%>','<%=listMonHoc.get(itemYCBS)[0].toString()%>')">
 										Xóa
 									</button>
@@ -97,6 +99,16 @@
 				  </div>
 				  <div class="row-dm flex-right">
 				     <button class="btn-xemdv" type="button" onclick="searchMon();" name="xem" id="btnLuu"><i class="fas fa-search"></i>Tìm kiếm</button>
+				  </div>
+				  <div class="row-dm">
+				     <div class="label-nd">Học kỳ </div>
+	                     <div class="nd-tt">
+	                     	<select class="form-ip" id = "hocKy">
+                     		<% for(int i = 1; i < 10; i++){ %>
+                     			<option value="<%=i%>">Học kỳ <%=i %></option>
+                     		<% } %>
+	                     	</select>
+						 </div>	
 				  </div>
 				  <div class="danh-sach-tep">
 				     <h2>Danh sách môn</h2>
@@ -180,6 +192,7 @@ function searchMon(){
 
 function addMon(monId){
 	var lopId = $("#lopId").val();
+	var hocKy = $("#hocKy").val();
 	var check = false;
 	$.ajax({
         url: '/phongdaotao/lophoc/addMon',
@@ -188,7 +201,8 @@ function addMon(monId){
         cache: false,
         data :{
         	'monId' : monId,
-        	'lopId' : lopId
+        	'lopId' : lopId,
+        	'hocKy' : hocKy
         },
         success : function(result) {
         	if(result.kq == 1){

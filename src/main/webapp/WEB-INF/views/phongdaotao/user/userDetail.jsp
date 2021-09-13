@@ -26,6 +26,12 @@
 			</div>					 
 		</li>
 		<li>
+			<div class="label-nd">Mã sinh viên</div>
+			<div class="nd-tt">
+	     		<p><%=user.getString("maSV")%></p>
+			</div>					 
+		</li>
+		<li>
 			<div class="label-nd">Giới tính</div>
 			<div class="nd-tt">
 	     		<p><%=user.getString("gioiTinh")%></p>

@@ -13,6 +13,7 @@
 	List<Object[]> lsSinhVien = (List<Object[]>) request.getAttribute("lsSinhVien");
 	List<WorkTask> lsData = (List<WorkTask>) request.getAttribute("lsWTSV");
 	long monId = (long) request.getAttribute("monId");
+	long lopId = (long) request.getAttribute("lopId");
 %>
 <style>
 .table > thead > tr > th{
@@ -39,7 +40,7 @@
 	            </select>
 			</div>
 		</div>
-		<div class="form-group">
+		<div class="form-group" id="dataSV" style="display: none;">
 			<table class="table table-bordered table-hover table-striped">
 				<thead>
 					<tr style="color:#d59100">
@@ -84,12 +85,75 @@
 				</tbody>
 			</table>
 		</div>
+		<div class="form-group" id="dataLop" style="display: none;">
+			<table class="table table-bordered table-hover table-striped">
+				<thead>
+					<tr style="color:#d59100">
+						<th>Sinh viên</th>
+						<th>Làm tốt</th>
+						<th>Làm được</th>
+						<th>Chưa được</th>
+					</tr>
+				</thead>
+				<tbody>
+				<% 
+					if(lsSinhVien != null && lsSinhVien.size() > 0){ 
+						for(int i = 0 ; i < lsSinhVien.size(); i++){
+				%>
+					<tr>
+						<td>
+							<b><%= lsSinhVien.get(i)[1].toString() %></b>
+						</td>
+						<td id="lamTot<%= lsSinhVien.get(i)[0] %>"></td>
+						<td id="lamDuoc<%= lsSinhVien.get(i)[0] %>"></td>
+						<td id="chuaDuoc<%= lsSinhVien.get(i)[0] %>"></td>
+					</tr>
+	                 <% } %>
+	            <% } %>
+				</tbody>
+			</table>
+		</div>
 	</div>
 </div>
 <script type="text/javascript">
 $(document).ready(function(){
-	loadData();
+	loadDataLop();
+	
+	$("#sinhVienId").select2({
+		tags: false,
+		language: {
+	        noResults: function(term) {
+	          	return "Không tìm thấy kết quả";
+	      	}
+	    }
+	});
 });
+function loadDataLop(){
+	$.ajax({
+		type : "GET",
+		contentType : "application/json",
+		url : "/worktask/loadDataLop",
+		data : {
+			'monId' : '<%=monId%>',
+			'lopId' : '<%=lopId%>'
+		},
+		dataType : "json",
+		success : function(data) {
+			$("#dataSV").hide();
+			$("#dataLop").show();
+			if(data.length > 0){
+				for(var i = 0 ;i< data.length; i++){
+					$("#lamTot"+data[i][0]).html(data[i][1]);
+					$("#lamDuoc"+data[i][0]).html(data[i][2]);
+					$("#chuaDuoc"+data[i][0]).html(data[i][3]);
+				}
+			}
+		},
+		error : function(){
+			console.log("error");
+		}
+	});
+}
 function loadData(){
 	var sinhVienId = $("#sinhVienId").val();
 	if(sinhVienId != '' && sinhVienId != 0){
@@ -104,6 +168,8 @@ function loadData(){
 			},
 			dataType : "json",
 			success : function(data) {
+				$("#dataSV").show();
+				$("#dataLop").hide();
 				if(data.length > 0){
 					for(var i = 0 ;i< data.length; i++){
 						$("#ketQua"+data[i].workTaskDetailId).val(data[i].ketQua);
@@ -117,6 +183,8 @@ function loadData(){
 				console.log("error");
 			}
 		});
+	}else{
+		loadDataLop();
 	}
 }
 </script>

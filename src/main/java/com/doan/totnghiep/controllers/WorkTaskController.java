@@ -247,10 +247,21 @@ public class WorkTaskController {
 			param.setAttribute("lsSinhVien", lsSinhVien);
 			param.setAttribute("lsWTSV", lsData);
 			param.setAttribute("monId", monId);
+			param.setAttribute("lopId", lopId);
 			return "wt.viewpdt";
 		}else {
 			return "redirect:/login";
 		}
+	}
+	
+	@RequestMapping(value = "/loadDataLop", produces = "application/json")
+	@ResponseBody
+	public ResponseEntity<List<Object[]>> getDataLop() {
+		long monId = param.getLong("monId", 0);
+		long lopId = param.getLong("lopId", 0);
+		
+		List<Object[]> lsData = this.custom.getDataWTByLopId(lopId, monId);
+		return new ResponseEntity<>(lsData,HttpStatus.OK);
 	}
 
 }

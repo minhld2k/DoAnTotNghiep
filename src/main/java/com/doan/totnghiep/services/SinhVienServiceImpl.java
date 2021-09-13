@@ -1,5 +1,7 @@
 package com.doan.totnghiep.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,11 @@ public class SinhVienServiceImpl implements SinhVienService {
 	@Override
 	public SinhVien getSinhVien(long id) {
 		return this.repository.findById(id).get();
+	}
+
+	@Override
+	public List<SinhVien> findByMaSV(String maSV) {
+		return repository.findByMaSV(maSV);
 	}
 
 }

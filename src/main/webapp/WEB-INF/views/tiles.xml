@@ -81,6 +81,9 @@
         <put-attribute name="title" value="" />  
         <put-attribute name="body" value="/WEB-INF/views/phongdaotao/lophoc/editLopHoc.jsp" />  
     </definition>  
+    
+    <definition name="lop.viewnhapdiem" template="/WEB-INF/views/phongdaotao/lophoc/viewNhapDiem.jsp">     
+    </definition>
     <!-- LopHoc Page -->
     
     <!-- CoSo Page -->
@@ -334,4 +337,14 @@
      <definition name="danhgia.viewpdt" template="/WEB-INF/views/phongdaotao/danhgia/viewPDT.jsp">     
     </definition>
     <!-- danh gia Page -->
+    
+    <!-- BaoCaoThongKe Page -->
+    <definition name="baocao.view" extends="base.definition">  
+        <put-attribute name="title" value="Báo cáo thống kê" />  
+        <put-attribute name="body" value="/WEB-INF/views/baocaothongke/view.jsp" />  
+    </definition>
+    
+     <definition name="baocao.hocKy" template="/WEB-INF/views/baocaothongke/hocKy.jsp">     
+    </definition>
+    <!-- BaoCaoThongKe Page -->
 </tiles-definitions> 

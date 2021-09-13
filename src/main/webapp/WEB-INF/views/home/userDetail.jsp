@@ -18,6 +18,7 @@
 	String soDienThoaiGiaDinh = "";
 	String moTa = "";
 	String tenLop = "";
+	String maSV = "";
 	if(u.getNhomid() == 1){
 		SinhVien sv = CommonUtil.getSinhVienByUserId(u.getId());
 		hoTen = sv.getHoTen();
@@ -29,6 +30,7 @@
 		tenLop = sv.getLop().getTen();
 		soDienThoaiGiaDinh = sv.getSoDienThoaiGiaDinh();
 		moTa = sv.getMoTa();
+		maSV = sv.getMa();
 	}else if(u.getNhomid() == 2){
 		GiangVien gv = CommonUtil.getGiangVienByUserId(u.getId());
 		hoTen = gv.getHoTen();
@@ -89,6 +91,11 @@
 					</div>
 					
 					<% if(u.getNhomid() == 1){%>
+						<div class="form-group">
+							<label for="name" class="col-form-label">Mã sinh viên</label> 
+							<input type="text" class="form-control" readonly="readonly" id="maSV" name="maSV" value="<%=maSV%>" />
+						</div>
+						
 						<div class="form-group">
 							<label for="name" class="col-form-label">Ngày sinh <strong>*</strong></label> 
 							<input type="date" class="form-control" id="ngaySinh" name="ngaySinh" value="<%= birthDay %>" />

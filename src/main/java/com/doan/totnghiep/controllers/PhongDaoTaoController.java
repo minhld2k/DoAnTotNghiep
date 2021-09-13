@@ -29,6 +29,7 @@ import com.doan.totnghiep.entities.GiangVien;
 import com.doan.totnghiep.entities.KhoaHoc;
 import com.doan.totnghiep.entities.LopHoc;
 import com.doan.totnghiep.entities.MonHoc;
+import com.doan.totnghiep.entities.NgoaiHeThong;
 import com.doan.totnghiep.entities.NhomNguoiDung;
 import com.doan.totnghiep.entities.PhongHoc;
 import com.doan.totnghiep.entities.QuanTri;
@@ -41,6 +42,7 @@ import com.doan.totnghiep.services.GiangVienService;
 import com.doan.totnghiep.services.KhoaHocService;
 import com.doan.totnghiep.services.LopHocService;
 import com.doan.totnghiep.services.MonHocService;
+import com.doan.totnghiep.services.NgoaiHeThongService;
 import com.doan.totnghiep.services.ParamService;
 import com.doan.totnghiep.services.PhongHocService;
 import com.doan.totnghiep.services.QuanTriService;
@@ -90,6 +92,9 @@ public class PhongDaoTaoController {
 	
 	@Autowired
 	ParamService param;
+	
+	@Autowired
+	NgoaiHeThongService nhtService;
 	
 	@Autowired
 	HttpSession session;
@@ -346,6 +351,7 @@ public class PhongDaoTaoController {
 		Map<String, String> map = new HashMap<String, String>();
 		long lopId = param.getLong("lopId", 0);
 		long monId = param.getLong("monId", 0);
+		int hocKy = param.getInt("hocKy", 0);
 		if (this.custom.getMonHoc(lopId, monId) > 0) {
 			map.put("kq", "0");
 		}else {
@@ -354,12 +360,14 @@ public class PhongDaoTaoController {
 			json.put("lopid", lopId);
 			json.put("monid", monId);
 			json.put("trangthai", 0);
+			json.put("hocky", hocKy);
 			tableValue.put(json);
 			
 			List<String> tableCol = new ArrayList<>();
 			tableCol.add("lopid");
 			tableCol.add("monid");
 			tableCol.add("trangthai");
+			tableCol.add("hocky");
 			this.custom.insert("qlsv_lophoc_monhoc", tableCol, tableValue);
 			
 			map.put("kq", "1");
@@ -591,7 +599,6 @@ public class PhongDaoTaoController {
 			long id = param.getLong("id", 0);
 			long nhomId = param.getLong("nhomId", 0);
 			String email = param.getString("email", "");
-			
 			// save user
 			if(id > 0) {
 				user = this.userService.getUser(id);
@@ -601,8 +608,6 @@ public class PhongDaoTaoController {
 				String rePass = param.getString("rePassNew", "");
 				if (password.equals(rePass) && !password.equals("")) {
 					user.setPassword(CommonUtil.getBcrypt(password));
-				}else {
-					return "redirect:/phongdaotao/user/addOrEdit";
 				}
 			}else {
 				user.setStatus(0);
@@ -650,6 +655,7 @@ public class PhongDaoTaoController {
 			case 1:
 				String ngaySinh = param.getString("ngaySinh", "");
 				String phoneFamily = param.getString("phoneFamily", "");
+				String maSV = param.getString("maSV","");
 				long lopId = param.getLong("lopId", 0);
 				SinhVien sv = new SinhVien();
 				
@@ -674,6 +680,7 @@ public class PhongDaoTaoController {
 				sv.setMoTa(moTa);
 				sv.setSoDienThoaiCaNhan(phone);
 				sv.setSoDienThoaiGiaDinh(phoneFamily);
+				sv.setMa(maSV);
 				
 				if (lopId > 0) {
 					LopHoc lop = this.lopHocService.getLopHoc(lopId);
@@ -904,6 +911,7 @@ public class PhongDaoTaoController {
 			String phoneFamily = "";
 			String moTa = "";
 			String ngaySinh = "";
+			String maSV = "";
 			long lopId = 0;
 			if (id > 0) {
 				try {
@@ -912,7 +920,8 @@ public class PhongDaoTaoController {
 						phoneFamily = sv.getSoDienThoaiGiaDinh();
 						moTa = sv.getMoTa();
 						lopId = sv.getLop().getId();
-						ngaySinh = df.format(sv.getNgaySinh());
+						ngaySinh = sv.getNgaySinh() != null ? df.format(sv.getNgaySinh()) : "";
+						maSV = sv.getMa();
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -923,6 +932,7 @@ public class PhongDaoTaoController {
 			json.put("moTa", moTa);
 			json.put("ngaySinh", ngaySinh);
 			json.put("phoneFamily", phoneFamily);
+			json.put("maSV", maSV);
 			
 			List<LopHoc> lsLopHoc = this.custom.getAllLopHoc("", 0, -1, -1);
 			session.setAttribute("lsLop", lsLopHoc);
@@ -952,13 +962,26 @@ public class PhongDaoTaoController {
 	public String checkMaUser() {
 		long id = param.getLong("userId", 0);
 		String khoa = param.getString("khoa", "");
-		List<User> ls = this.userService.findByUsername(khoa);
+		int loai = param.getInt("loai", 0);
 		boolean check = true;
-		if (ls.size() > 0) {
-			for (User user : ls) {
-				if (user.getId() != id) {
-					check = false;
-					break;
+		if (loai == 1) {
+			List<User> ls = this.userService.findByUsername(khoa);
+			if (ls.size() > 0) {
+				for (User user : ls) {
+					if (user.getId() != id) {
+						check = false;
+						break;
+					}
+				}
+			}
+		}else {
+			List<SinhVien> lsSV = this.sinhVienService.findByMaSV(khoa);
+			if (lsSV.size() > 0) {
+				for (SinhVien sv : lsSV) {
+					if (sv.getId() != id) {
+						check = false;
+						break;
+					}
 				}
 			}
 		}
@@ -992,6 +1015,7 @@ public class PhongDaoTaoController {
 			json.put("diaChi", sv.getDiaChi());
 			json.put("lop", sv.getLop() != null ? sv.getLop().getTen() : "");
 			json.put("moTa", sv.getMoTa());
+			json.put("maSV", sv.getMa());
 		}else if (nhomId == 2) {
 			tenNhom = "Giảng viên";
 			String gioiTinh = "Nữ";
@@ -1430,6 +1454,54 @@ public class PhongDaoTaoController {
 			}else {
 				return "redirect:/403";
 			}
+		}else {
+			return "redirect:/login";
+		}
+	}
+	
+	@RequestMapping(value = "/lop/viewDiemNgoaiHeThong")
+	public String viewDiemNgoaiHeThong() {
+		User _u = (User) session.getAttribute("USERLOGIN");
+		if (_u != null) {
+			String _url = param.getServletPath();
+			if (CommonUtil.checkQuyen(_url, _u)) {
+				long lopId = param.getLong("lopId", 0);
+				List<Object[]> lsSinhVien = this.custom.getAllSinhVienByLopId(lopId);
+				
+				param.setAttribute("lsSinhVien", lsSinhVien);
+				param.setAttribute("Lop", this.lopService.getLopHoc(lopId));
+				
+				return "lop.viewnhapdiem";
+			}else {
+				return "redirect:/403";
+			}
+		}else {
+			return "redirect:/login";
+		}
+	}
+	
+	@PostMapping(value = "/lop/saveDiemNgoaiHeThong")
+	public String saveDiemThi(@RequestParam(name = "sinhVienId[]", required = false) List<Long> lsSinhVienId
+				,@RequestParam(name = "thucHien[]", defaultValue = "0") List<String> lsThucHien
+				,@RequestParam(name = "baoCao[]", defaultValue = "0") List<String> lsBaoCao
+				,@RequestParam(name = "chinhTri[]", defaultValue = "0") List<String> lsChinhTri) {
+		User u = (User) session.getAttribute("USERLOGIN");
+		if (u != null) {
+			int loai = param.getInt("loai", 0); // 1: diem do an; 2: diem chinh tri
+			for (int i = 0; i < lsSinhVienId.size()/2; i++) {
+				NgoaiHeThong dt = this.custom.getDiemBySinhVienId(lsSinhVienId.get(i));
+				dt.setSinhVienId(lsSinhVienId.get(i));
+				if(loai == 1) {
+					dt.setBaoCao(lsBaoCao.get(i).equals("0") ? "" : lsBaoCao.get(i));
+					dt.setThucHien(lsThucHien.get(i).equals("0") ? "" : lsThucHien.get(i));
+				}else {
+					dt.setChinhTri(lsChinhTri.get(i).equals("0") ? "" : lsChinhTri.get(i));
+				}
+				
+				this.nhtService.save(dt);
+			}
+			
+			return "redirect:/phongdaotao/lophoc/list";
 		}else {
 			return "redirect:/login";
 		}

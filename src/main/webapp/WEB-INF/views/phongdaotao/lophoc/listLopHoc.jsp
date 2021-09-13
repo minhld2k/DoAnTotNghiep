@@ -187,9 +187,14 @@ function xemMonHoc(lopId) {
 	});	
 }
 
-function viewNhatKy(lopId) {
+function viewNhatKy(lopId,loai) {
 	var url = "/phongdaotao/lop/viewNhatKy";
 	var name = 'Nhật ký lên lớp';
+	
+	if(loai == 2){
+		url = "/phongdaotao/lop/viewDiemNgoaiHeThong";
+		name = "Nhập điểm";
+	}
 	
 	var _uniwindow = $.uniwindow({
 		'title': name,

@@ -69,6 +69,9 @@ public class SinhVien{
 	@Column(name="mota")
 	private String moTa;
 	
+	@Column(name="ma")
+	private String ma;
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "lopid")
 	private LopHoc lop;

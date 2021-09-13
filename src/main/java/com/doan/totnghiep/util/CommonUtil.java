@@ -22,6 +22,7 @@ import com.doan.totnghiep.dto.UserDTO;
 import com.doan.totnghiep.entities.GiangVien;
 import com.doan.totnghiep.entities.KhoaHoc;
 import com.doan.totnghiep.entities.LopHoc;
+import com.doan.totnghiep.entities.NgoaiHeThong;
 import com.doan.totnghiep.entities.Phep;
 import com.doan.totnghiep.entities.QuanTri;
 import com.doan.totnghiep.entities.SinhVien;
@@ -440,5 +441,48 @@ public class CommonUtil {
 		}
     	return "";
 	}
-	 
+    
+    public static String getXepLoai(double dtb) {
+    	String xepLoai = "";
+    	if(dtb < 5 ) {
+    		xepLoai = "Không đạt";
+    	}else if((5 <= dtb) && (dtb < 7)) {
+    		xepLoai = "Trung bình";
+    	}else if((5 <= dtb) && (dtb < 7)) {
+    		xepLoai = "Trung bình khá";
+    	}else if((7 <= dtb) && (dtb < 8)) {
+    		xepLoai = "Khá";
+    	}else if((8 <= dtb) && (dtb < 9)) {
+    		xepLoai = "Giỏi";
+    	}else if((9 <= dtb) && (dtb <= 10)) {
+    		xepLoai = "Xuất sắc";
+    	}
+    	return xepLoai;
+    }
+    
+    public static NgoaiHeThong getDiemBySinhVienId(long sinhVienId) {
+    	return custom.getDiemBySinhVienId(sinhVienId);
+    }
+    
+    public static double getDiemTBMon(String lyThuyet,String thucHanh) {
+    	if (lyThuyet.equals("")) {
+			return Double.parseDouble(thucHanh);
+		}else if (thucHanh.equals("")) {
+			return Double.parseDouble(lyThuyet);
+		}else {
+			return (Double.parseDouble(lyThuyet) + Double.parseDouble(thucHanh)*2)/3 ;
+		}
+    }
+    
+    public static double getDiemTBHocKy(List<Object[]> lsDiem) {
+    	int soTiet = 0;
+    	double dtb = 0;
+    	for (int i = 0; i < lsDiem.size(); i++) {
+    		int tiet = Integer.parseInt(lsDiem.get(i)[1].toString());
+			dtb += getDiemTBMon(lsDiem.get(i)[2].toString(), lsDiem.get(i)[3].toString()) * tiet;
+			soTiet += tiet;
+		}
+    	
+    	return dtb/soTiet;
+    }
 }

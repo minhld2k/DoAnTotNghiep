@@ -16,6 +16,11 @@
 			long lopId = user.getLong("lopId");
 	%>	
 		<div class="form-group">
+			<label for="name" class="col-form-label">Mã sinh viên <strong>*</strong></label> 
+			<input type="text" class="form-control" id="maSV" name="maSV" value="<%= user.getString("maSV")%>" />
+		</div>
+		
+		<div class="form-group">
 			<label for="name" class="col-form-label">Ngày sinh</label> 
 			<input type="date" class="form-control" id="ngaySinh" name="ngaySinh" value="<%= user.getString("ngaySinh") %>" />
 		</div>
