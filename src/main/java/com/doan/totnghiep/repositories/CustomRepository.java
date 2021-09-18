@@ -1203,7 +1203,7 @@ public class CustomRepository {
 		return results;
 	}
 	
-	public List<Object[]> getDiemThi(int hocKy, long lopId,long sinhVienId){
+	public List<Object[]> getDiemThi(int hocKy, long sinhVienId){
 		StringBuilder sql = new StringBuilder();
 		sql.append(" select m.id,m.sotiet,d.lythuyet,d.thuchanh FROM qlsv_diemthis d ")
 			.append(" INNER JOIN qlsv_lophoc_monhoc lm ON lm.id = d.lopmonid ")
@@ -1211,8 +1211,7 @@ public class CustomRepository {
 			.append(" where trangthai = 2 ")
 			.append(" AND m.daxoa = 0 ")
 			.append(" AND lm.hocky = " + hocKy)
-			.append(" AND d.sinhvienid = " + sinhVienId)
-			.append(" AND lm.lopid = " + lopId);
+			.append(" AND d.sinhvienid = " + sinhVienId);
 		List<Object[]> results = new ArrayList<Object[]>();
 		List<Map<String, Object>> rows = _jdbcTemplate.queryForList(sql.toString());
 		for (Map<String, Object> map : rows) {

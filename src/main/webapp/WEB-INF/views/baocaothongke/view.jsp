@@ -1,3 +1,4 @@
+<%@page import="com.doan.totnghiep.entities.KhoaHoc"%>
 <%@page import="com.doan.totnghiep.entities.LopHoc"%>
 <%@page import="java.util.List"%>
 <%@page import="com.doan.totnghiep.entities.User"%>
@@ -8,6 +9,7 @@
 
 <%
 	List<LopHoc> lsLop = (List<LopHoc>) request.getAttribute("listLopHoc");
+	List<KhoaHoc> lsKhoa = (List<KhoaHoc>) request.getAttribute("listKhoa");
 	User _user = (User) session.getAttribute("USERLOGIN");
 %>
 <div class="container-fluid p-0">
@@ -18,7 +20,7 @@
 	<div class="card">
 		<div class="card-body">
 			<div class="box">
-				<div class="row">
+				<div class="row" id="body-search">
 					<div class="col-lg-4" >
 						<label for="name" class="mr-sm-2">Mã sinh viên</label> 
 						<input type="text" name="maSV" id="maSV" class="form-control" value=""/>
@@ -36,12 +38,31 @@
 					
 					<div class="col-lg-4" >
 						<label for="name" class="mr-sm-2">Học kỳ</label>
-						<select name="hocKy" id="hocKy" class="form-control">
+						<select name="hocKy" id="hocKy" class="form-control" onchange="loadForm()">
 							<option value=""> -- Chọn -- </option>
 							<% for(int i = 1 ; i <= 7; i ++){ %>
 								<option value="<%=i%>">Học kỳ <%=i %> </option>
 							<% } %>
 							<option value="11">Cuối khóa</option>
+						</select>
+					</div>
+					
+					<div class="col-lg-6" style="display: none">
+						<label for="name" class="mr-sm-2">Tình trạng</label>
+						<select name="tinhTrang" id="tinhTrang" class="form-control">
+							<option value="0"> -- Chọn -- </option>
+							<option value="1"> Đã tốt nghiệp </option>
+							<option value="2"> Chưa tốt nghiệp </option>
+						</select>
+					</div>
+					
+					<div class="col-lg-6" style="display: none">
+						<label for="name" class="mr-sm-2">Khóa</label>
+						<select name="khoaId" id="khoaId" class="form-control">
+							<option value=""> -- Chọn -- </option>
+							<% for(int i= 0 ; i < lsKhoa.size(); i ++){ %>
+								<option value="<%=lsKhoa.get(i).getId()%>"><%=lsKhoa.get(i).getTen() %></option>
+							<% } %>
 						</select>
 					</div>
 				</div>
@@ -65,13 +86,24 @@
 var lopId = 0;
 var maSV = '';
 var hocKy = 0;
+var tinhTrang = 0;
+var khoaId = 0;
 var ajaxRuning = 0;
 
 $(document).ready(function(){
-	loadMore(lopId, maSV, hocKy);
+	loadMore(lopId, maSV, hocKy,khoaId);
 });
+
+function loadForm(){
+	var hocKy = $("#hocKy").val();
+	if(hocKy == 11){
+		$(".col-lg-6").show();
+	}else{
+		$(".col-lg-6").hide();
+	}
+}
      
-function loadMore(lopId, maSV, hocKy) {
+function loadMore(lopId, maSV, hocKy,khoaId) {
 	ajaxRuning = 1;
 	$.ajax({
 		async: true,
@@ -81,7 +113,8 @@ function loadMore(lopId, maSV, hocKy) {
 		data: {
 			'lopId' : lopId,			
 			'maSV' : maSV,
-			'hocKy' : hocKy
+			'hocKy' : hocKy,
+			'khoaId' : khoaId
 		},
 		beforeSend: function() {
 			 $(".uni-loading").show();
@@ -107,20 +140,8 @@ function btnsearch(){
 		lopId = $('#lopId').val();
 		maSV =  $('#maSV').val();
 		hocKy =  $('#hocKy').val();
-		if(lopId == '' && maSV == ''){
-			$.confirm({
-		        'title': "",
-		        'message': "Vui lòng nhập mã sinh viên hoặc chọn lớp để xem báo cáo",
-		        'buttons': {
-		            'Đóng': {
-		                'class': 'blue',
-		                'action': function() {
-		                }
-		            }
-		        }
-		    });
-			return;
-		}else if(hocKy == ''){
+		khoaId = $('#khoaId').val();
+		if(hocKy == ''){
 			$.confirm({
 		        'title': "",
 		        'message': "Vui lòng chọn học kỳ để xem báo cáo",
@@ -134,9 +155,40 @@ function btnsearch(){
 		    });
 			return;
 		}else{
-			$("#ulCN").html("");
-			loadMore(lopId, maSV, hocKy);
+			if(hocKy == 11){
+				if(lopId == '' && maSV == '' && khoaId == ''){
+					$.confirm({
+				        'title': "",
+				        'message': "Vui lòng nhập mã sinh viên hoặc chọn lớp hoặc chọn khóa để xem báo cáo",
+				        'buttons': {
+				            'Đóng': {
+				                'class': 'blue',
+				                'action': function() {
+				                }
+				            }
+				        }
+				    });
+					return;
+				}
+			}else{
+				if(lopId == '' && maSV == ''){
+					$.confirm({
+				        'title': "",
+				        'message': "Vui lòng nhập mã sinh viên hoặc chọn lớp để xem báo cáo",
+				        'buttons': {
+				            'Đóng': {
+				                'class': 'blue',
+				                'action': function() {
+				                }
+				            }
+				        }
+				    });
+					return;
+				}
+			}
 		}
+		$("#ulCN").html("");
+		loadMore(lopId, maSV, hocKy,khoaId);
 	}
 }
 

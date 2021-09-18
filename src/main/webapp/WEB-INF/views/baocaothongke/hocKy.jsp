@@ -52,7 +52,7 @@
 			</thead>
 			<tbody>
 			<% for(int i = 0; i< lsSinhVien.size(); i++){%>
-				<tr>
+				<tr id="<%=lsSinhVien.get(i)[0].toString()%>">
 					<td>
 						<%= i + 1 %>
 					</td>
@@ -94,6 +94,8 @@ function loadData(){
 	lopId = $('#lopId').val();
 	maSV =  $('#maSV').val();
 	hocKy =  $('#hocKy').val();
+	tinhTrang = $('#tinhTrang').val();
+	khoaId = $('#khoaId').val();
 	$.ajax({
 		type : "GET",
 		contentType : "application/json",
@@ -101,14 +103,18 @@ function loadData(){
 		data: {
 			'lopId' : lopId,			
 			'maSV' : maSV,
-			'hocKy' : hocKy
+			'hocKy' : hocKy,
+			'tinhTrang' : tinhTrang,
+			'khoaId' : khoaId
 		},
 		dataType : "json",
 		success : function(data) {
 			console.log(data);
+			$(".table").find("tbody").find("tr").hide();
 			if(data.length > 0){
 				for(var i = 0 ;i< data.length; i++){
 					var sinhVienId = data[i].sinhVienId;
+					$("#"+sinhVienId).show();
 					$("#dtb"+sinhVienId).html(data[i].dtb);
 					$("#xepLoai"+sinhVienId).html(data[i].xepLoai);
 					$("#noMon"+sinhVienId).html(data[i].soMonNo);
